@@ -1,19 +1,40 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import joblib
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.model_selection import train_test_split
 
 st.set_page_config(page_title="Insurance Cost Predictor", page_icon="🏥")
 
 @st.cache_resource
-def load():
-    model     = joblib.load("models/best_model.pkl")
-    le_sex    = joblib.load("models/le_sex.pkl")
-    le_smoker = joblib.load("models/le_smoker.pkl")
-    scaler    = joblib.load("models/scaler.pkl")
+def train_model():
+    df = pd.read_csv("Medical_Insurance.csv")
+    df['log_charges'] = np.log1p(df['charges'])
+
+    le_sex    = LabelEncoder()
+    le_smoker = LabelEncoder()
+    df['sex']    = le_sex.fit_transform(df['sex'])
+    df['smoker'] = le_smoker.fit_transform(df['smoker'])
+    df = pd.get_dummies(df, columns=['region'], drop_first=True)
+
+    X = df.drop(columns=['charges', 'log_charges']).astype(float)
+    y = df['log_charges']
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.2, random_state=42)
+
+    scaler = StandardScaler()
+    scale_cols = ['age', 'bmi', 'children']
+    X_train[scale_cols] = scaler.fit_transform(X_train[scale_cols])
+    X_test[scale_cols]  = scaler.transform(X_test[scale_cols])
+
+    model = GradientBoostingRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+
     return model, le_sex, le_smoker, scaler
 
-model, le_sex, le_smoker, scaler = load()
+model, le_sex, le_smoker, scaler = train_model()
 
 st.title("🏥 Medical Insurance Cost Predictor")
 st.write("Enter patient details to estimate annual insurance charges.")
