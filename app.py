@@ -27,7 +27,7 @@ with col1:
 with col2:
     children = st.selectbox("Number of Children", [0, 1, 2, 3, 4, 5])
     smoker   = st.selectbox("Smoker", ["no", "yes"])
-    region   = st.selectbox("Region", ["northeast","northwest","southeast","southwest"])
+    region   = st.selectbox("Region", ["northeast", "northwest", "southeast", "southwest"])
 
 if st.button("Predict Insurance Cost", type="primary", use_container_width=True):
     d = pd.DataFrame([{
@@ -40,9 +40,9 @@ if st.button("Predict Insurance Cost", type="primary", use_container_width=True)
     for col in ["region_northwest", "region_southeast", "region_southwest"]:
         if col not in d.columns:
             d[col] = 0
-    d[["age","bmi","children"]] = scaler.transform(d[["age","bmi","children"]])
-    X = d[["age","sex","bmi","children","smoker",
-           "region_northwest","region_southeast","region_southwest"]].astype(float)
+    d[["age", "bmi", "children"]] = scaler.transform(d[["age", "bmi", "children"]])
+    X = d[["age", "sex", "bmi", "children", "smoker",
+           "region_northwest", "region_southeast", "region_southwest"]].astype(float)
 
     pred = np.expm1(model.predict(X)[0])
 
@@ -55,8 +55,3 @@ if st.button("Predict Insurance Cost", type="primary", use_container_width=True)
     c3.metric("Age",          f"{age} yrs")
 
 st.caption("Medical Insurance Cost Predictor | Supervised ML Mini Project")
-'''
-
-with open("app.py", "w") as f:
-    f.write(app_code)
-print("app.py saved.  Run:  streamlit run app.py")
