@@ -5,7 +5,86 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.model_selection import train_test_split
 
-st.set_page_config(page_title="Insurance Cost Predictor", page_icon="🏥")
+st.set_page_config(page_title="Insurance Cost Predictor", page_icon="🏥", layout="centered")
+
+# ── Neon Background CSS ──────────────────────────────────────────────
+st.markdown("""
+<style>
+/* Main background */
+.stApp {
+    background-image: url("https://images.unsplash.com/photo-1518770660439-4636190af475?w=1600&auto=format&fit=crop");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+/* Dark overlay with neon tint */
+.stApp::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(5, 5, 20, 0.82);
+    z-index: 0;
+}
+
+/* All content above overlay */
+.block-container {
+    position: relative;
+    z-index: 1;
+    background: rgba(10, 12, 35, 0.75);
+    border: 1px solid #00c8c8;
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 0 30px rgba(0, 200, 200, 0.25);
+}
+
+/* Title */
+h1 { color: #00c8c8 !important; text-shadow: 0 0 12px #00c8c8; }
+
+/* Text */
+p, label, .stMarkdown { color: #c8f0f0 !important; }
+
+/* Metric value */
+[data-testid="metric-container"] {
+    background: rgba(0, 200, 200, 0.08);
+    border: 1px solid #00c8c8;
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 0 10px rgba(0,200,200,0.2);
+}
+[data-testid="stMetricValue"] { color: #00ffcc !important; font-size: 1.6rem !important; }
+[data-testid="stMetricLabel"] { color: #a0e0e0 !important; }
+
+/* Button */
+.stButton > button {
+    background: linear-gradient(135deg, #00c8c8, #0066ff);
+    color: white !important;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 1rem;
+    box-shadow: 0 0 15px rgba(0, 200, 200, 0.5);
+    transition: 0.3s;
+}
+.stButton > button:hover {
+    box-shadow: 0 0 25px rgba(0, 200, 200, 0.9);
+    transform: scale(1.02);
+}
+
+/* Inputs and selects */
+.stSelectbox > div, .stNumberInput > div, .stSlider {
+    background: rgba(0,200,200,0.05) !important;
+}
+
+/* Divider */
+hr { border-color: #00c8c8 !important; opacity: 0.4; }
+
+/* Caption */
+.stCaption { color: #607070 !important; }
+</style>
+""", unsafe_allow_html=True)
+
 
 @st.cache_resource
 def train_model():
